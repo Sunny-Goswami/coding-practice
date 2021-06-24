@@ -1,5 +1,7 @@
 #include<iostream>
 #include<vector>
+#include<queue>
+
 using namespace  std;
 
 vector<int> visited;
@@ -9,15 +11,25 @@ void addEdge(vector<int> adjList[], int node1, int node2){
     adjList[node2].push_back(node1);
 }
 
-void dfs(vector<int> adjList[], int vertex){    
+void bfs(vector<int> adjList[], int vertex){
+    queue<int> q;
+    q.push(vertex);
     visited[vertex] = 1;
-    cout << vertex <<"-> ";
-    for(auto it: adjList[vertex]){
-        if (!visited[it])
-            dfs(adjList, it);
-    }
-}
     
+    while(!q.empty()){
+        int front = q.front();
+        q.pop();
+        cout << front << " ->";
+        
+        for(auto it: adjList[front]){
+            if (!visited[it]){
+                q.push(it);
+                visited[it] = 1;
+            }
+        }
+    }    
+}
+
 int main(){
     int num_of_nodes, num_of_edges;
     cin >> num_of_nodes >> num_of_edges;
@@ -34,6 +46,6 @@ int main(){
     }
     for(int i=1; i<=num_of_nodes; i++){
         if(!visited[i])
-            dfs(adjList, i);
+            bfs(adjList, i);
     }
 }
