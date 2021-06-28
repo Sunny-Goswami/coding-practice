@@ -5,23 +5,18 @@
 using namespace std;
 
 class  Solution {
-    bool bipartiteBFS(int vertex, vector<int> adjList[], int color[]){
-        queue<int> q;
-        q.push(vertex);
-        color[vertex] = 1;
+    bool bipartiteDFS(int vertex, vector<int> adjList[], int color[]){
+        if (color[vertex] = -1) color[vertex] = 1;
 
-        while(!q.empty()){
-            int curr = q.front();
-            q.pop();
-
-            for(auto it: adjList[curr]){
-                if (color[it] == -1){
-                    color[it] = 1 - color[curr];
-                    q.push(it);
-                }
-                else if (color[it] == color[curr])
+        for(auto it: adjList[vertex]){
+            if (color[it] == -1){
+                color[it] = 1 - color[vertex];
+                if (!bipartiteDFS(it, adjList, color))
                     return false;
             }
+            else if(color[it] == color[vertex]) 
+                return false;
+            
         }
         return true;
     }
@@ -32,7 +27,7 @@ public:
 
         for(int i=1; i<=N; i++){
             if (color[i] == -1){
-                if (!bipartiteBFS(i, adjList, color))
+                if (!bipartiteDFS(i, adjList, color))
                     return false;
             }
         }
